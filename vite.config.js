@@ -8,4 +8,5 @@ export default defineConfig({
     // Add your ngrok host here
     allowedHosts: ["32cbcc8219ea.ngrok-free.app"],
   },
+  base: "/VentSystem/",
 });
