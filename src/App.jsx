@@ -1,9 +1,9 @@
 // App.jsx
-import React from "react";
-import { Container, Typography, Box, Paper } from "@mui/material";
+import { Container, Typography, Box } from "@mui/material";
 import StatusCard from "./components/StatusCard";
 import RelayControl from "./components/RelayControl";
 import SettingsForm from "./components/SettingsForm";
+import AlarmStatusCardWithTimer from "./components/AlarmStatusCardWithTimer";
 
 function App() {
   return (
@@ -20,8 +20,12 @@ function App() {
         <RelayControl />
       </Box>
 
-      <Box>
+      <Box sx={{ mb: 3 }}>
         <SettingsForm />
+      </Box>
+
+      <Box>
+        <AlarmStatusCardWithTimer />
       </Box>
     </Container>
   );
