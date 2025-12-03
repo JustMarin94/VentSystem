@@ -1,25 +1,44 @@
-import React, { useState, useEffect } from "react";
-import { Paper, TextField, Button, Box, CircularProgress } from "@mui/material";
+import { useState, useEffect } from "react";
+import {
+  Paper,
+  Typography,
+  TextField,
+  Button,
+  Box,
+  CircularProgress,
+} from "@mui/material";
 import axios from "axios";
 
 function SettingsForm() {
   const [frequency, setFrequency] = useState("");
   const [humidity, setHumidity] = useState("");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const apiUrl = "http://192.168.178.54:2000/api/config";
 
-  // Fetch current config on load
   useEffect(() => {
     const fetchConfig = async () => {
       try {
         const response = await axios.get(apiUrl);
-        const data = response.data;
-        setFrequency(data.read_interval_ms / 1000); // Convert ms → seconds
-        setHumidity(data.humidity_threshold);
-      } catch (error) {
-        console.error("Error fetching config:", error);
+
+        // safe defaults
+        const data = response.data || {};
+        const readInterval =
+          typeof data.read_interval_ms === "number"
+            ? data.read_interval_ms
+            : 10000;
+        const humidityThreshold =
+          typeof data.humidity_threshold === "number"
+            ? data.humidity_threshold
+            : 50;
+
+        setFrequency(readInterval / 1000); // convert ms → s
+        setHumidity(humidityThreshold);
+      } catch (err) {
+        console.error("Error fetching config:", err);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -28,19 +47,20 @@ function SettingsForm() {
     fetchConfig();
   }, []);
 
-  // Handle form submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSaving(true);
     try {
       await axios.post(apiUrl, {
-        read_interval_ms: Number(frequency) * 1000, // seconds → ms
+        read_interval_ms: Number(frequency) * 1000,
         humidity_threshold: Number(humidity),
       });
       alert("Settings updated!");
-    } catch (error) {
-      console.error("Error saving config:", error);
+      setError(false); // reset error if successful
+    } catch (err) {
+      console.error("Error saving config:", err);
       alert("Failed to update settings");
+      setError(true);
     } finally {
       setSaving(false);
     }
@@ -50,6 +70,16 @@ function SettingsForm() {
     return (
       <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
         <CircularProgress />
+      </Paper>
+    );
+  }
+
+  if (error) {
+    return (
+      <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
+        <Typography color="error">
+          Error loading or saving settings. Check server connection.
+        </Typography>
       </Paper>
     );
   }

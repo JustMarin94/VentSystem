@@ -12,6 +12,7 @@ function RelayControl() {
   const [relayState, setRelayState] = useState("OFF");
   const [relayMode, setRelayMode] = useState("AUTO");
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [saving, setSaving] = useState(false);
 
   const relayUrl = "http://192.168.178.54:2000/api/relay";
@@ -30,6 +31,7 @@ function RelayControl() {
         setRelayMode(modeResp.data.trim());
       } catch (error) {
         console.error("Error fetching relay info:", error);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -50,6 +52,7 @@ function RelayControl() {
     } catch (error) {
       console.error("Error updating relay state:", error);
       alert("Failed to update relay state");
+      setError(true);
     } finally {
       setSaving(false);
     }
@@ -65,6 +68,7 @@ function RelayControl() {
     } catch (error) {
       console.error("Error updating relay mode:", error);
       alert("Failed to update relay mode");
+      setError(true);
     } finally {
       setSaving(false);
     }
@@ -74,6 +78,14 @@ function RelayControl() {
     return (
       <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
         <CircularProgress />
+      </Paper>
+    );
+  }
+
+  if (error) {
+    return (
+      <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
+        <Typography color="error">Error loading data</Typography>
       </Paper>
     );
   }

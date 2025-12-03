@@ -6,6 +6,7 @@ function StatusCard() {
   const [temperature, setTemperature] = useState(null);
   const [humidity, setHumidity] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   const apiUrl = "http://192.168.178.54:2000/api/data";
 
@@ -23,6 +24,7 @@ function StatusCard() {
         }
       } catch (error) {
         console.error("Error fetching status:", error);
+        setError(true);
       } finally {
         setLoading(false);
       }
@@ -39,6 +41,14 @@ function StatusCard() {
     return (
       <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
         <CircularProgress />
+      </Paper>
+    );
+  }
+
+  if (error) {
+    return (
+      <Paper elevation={3} sx={{ p: 2, textAlign: "center" }}>
+        <Typography color="error">Error loading data</Typography>
       </Paper>
     );
   }
