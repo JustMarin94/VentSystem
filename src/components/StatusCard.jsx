@@ -8,7 +8,9 @@ function StatusCard() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const apiUrl = "http://192.168.178.54:2000/api/data";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const apiUrl = `${BASE_URL}/api/data`;
 
   useEffect(() => {
     const fetchData = async () => {

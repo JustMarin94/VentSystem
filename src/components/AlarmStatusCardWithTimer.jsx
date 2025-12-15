@@ -16,10 +16,11 @@ function AlarmStatusCardWithTimer() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
 
-  const TempDeactivateUrl =
-    "http://192.168.178.54:2000/api/alarmDeactivateTimed";
-  const armedUrl = "http://192.168.178.54:2000/api/alarmArmed";
-  const alarmUrl = "http://192.168.178.54:2000/api/alarm";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const TempDeactivateUrl = `${BASE_URL}/api/alarmDeactivateTimed`;
+  const armedUrl = `${BASE_URL}/api/alarmArmed`;
+  const alarmUrl = `${BASE_URL}/api/alarm`;
 
   useEffect(() => {
     const fetchData = async () => {

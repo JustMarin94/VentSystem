@@ -16,7 +16,9 @@ function SettingsForm() {
   const [error, setError] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const apiUrl = "http://192.168.178.54:2000/api/config";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const apiUrl = `${BASE_URL}/api/config`;
 
   useEffect(() => {
     const fetchConfig = async () => {

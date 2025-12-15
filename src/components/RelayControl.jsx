@@ -15,8 +15,10 @@ function RelayControl() {
   const [error, setError] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const relayUrl = "http://192.168.178.54:2000/api/relay";
-  const modeUrl = "http://192.168.178.54:2000/api/relay/mode";
+  const BASE_URL = import.meta.env.VITE_BASE_URL;
+
+  const relayUrl = `${BASE_URL}/api/relay`;
+  const modeUrl = `${BASE_URL}/api/relay/mode`;
 
   // Fetch current relay state & mode on load
   useEffect(() => {
